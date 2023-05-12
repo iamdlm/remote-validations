@@ -1,11 +1,15 @@
 ﻿using ContosoUniversity.Data;
 using ContosoUniversity.Models;
+using ContosoUniversity.Validators;
+using FluentValidation.Internal;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 
 namespace ContosoUniversity.Pages.Instructors
 {
@@ -90,6 +94,22 @@ namespace ContosoUniversity.Pages.Instructors
 
             PopulateAssignedCourseData(_context, Instructor);
             return Page();
+        }
+
+        public JsonResult OnPostValidateHireDate(Instructor instructor)
+        {
+            if (instructor != null)
+            {
+                var properties = new[] { "HireDate" };
+                var context = new ValidationContext<Instructor>(instructor, new PropertyChain(), new MemberNameValidatorSelector(properties));
+
+                IValidator v = new InstructorValidator();
+                ValidationResult result = v.Validate(context);
+
+                return new JsonResult(result.IsValid);
+            }
+
+            return new JsonResult(false);
         }
     }
 }

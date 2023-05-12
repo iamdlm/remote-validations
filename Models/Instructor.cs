@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,11 @@ namespace ContosoUniversity.Models
         [StringLength(50)]
         public string FirstMidName { get; set; }
 
+        [PageRemote(
+           ErrorMessage = "Date cannot be in the future.",
+           HttpMethod = "post",
+           PageHandler = "ValidateHireDate"
+       )]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Hire Date")]

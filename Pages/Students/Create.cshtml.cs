@@ -50,5 +50,12 @@ namespace ContosoUniversity.Pages.Students
 
             return Page();
         }
+
+        public JsonResult OnPostValidateEnrollmentDate()
+        {
+            bool result = Student.EnrollmentDate < DateTime.UtcNow;
+
+            return new JsonResult(result);
+        }
     }
 }
